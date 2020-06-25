@@ -25,9 +25,9 @@ Description
 
 Combined matrices for the following:
 
-1. TGEN Brain + GTEx Normal Brain: `gtexbrain-tgen-combined-gene-expression-rsem-tpm-collapsed.polya.rds`
-2. PBTA PolyA + rRNA corrected: `all-pbta-gene-expression-rsem-tpm.polya.stranded.combined.rds`
-3. PNOC003 PolyA: `pnoc003-pbta-gene-expression-rsem-tpm-collapsed.polya.rds`
+1. TGEN Brain + GTEx Normal Brain: ``gtexbrain-tgen-combined-gene-expression-rsem-tpm-collapsed.polya.rds``
+2. PBTA PolyA + rRNA corrected: ``all-pbta-gene-expression-rsem-tpm.polya.stranded.combined.rds``
+3. PNOC003 PolyA: ``pnoc003-pbta-gene-expression-rsem-tpm-collapsed.polya.rds``
    
 S3 location
 ===========
