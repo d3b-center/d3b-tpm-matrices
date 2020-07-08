@@ -42,6 +42,9 @@ combined_clin <- readRDS(combined_clin)
 uncorrected_mat <- uncorrected_mat[,rownames(combined_clin)]
 corrected_mat <- corrected_mat[,rownames(combined_clin)]
 
+# house keeping genes
+hkgenes <- c("ACTB", "TUBA1A", "TUBB", "GAPDH", "LDHA", "RPL19")
+
 # t-SNE (uncorrected matrix)
 set.seed(100) # set seed for reproducibility
 tsneOut <- Rtsne(t(log2(uncorrected_mat+1)), check_duplicates = FALSE, theta = 0)
@@ -52,6 +55,21 @@ p <- ggplot(tsneData, aes(X1, X2,
                           shape = batch)) +
   geom_jitter(size = 4, width = 0.5, height = 0.5, alpha = 0.5) +
   theme_bw() + ggtitle('t-SNE before batch correction') +
+  theme(plot.title = element_text(size = 12, face = "bold", hjust = 0.5),
+        legend.title=element_text(size=10),
+        legend.text=element_text(size=8)) + guides(size = F)
+
+# house keeping genes only
+set.seed(100) # set seed for reproducibility
+uncorrected_mat.hk <- uncorrected_mat[rownames(uncorrected_mat) %in% hkgenes,]
+tsneOut <- Rtsne(t(log2(uncorrected_mat.hk+1)), check_duplicates = FALSE, theta = 0)
+tsneData <- data.frame(tsneOut$Y, combined_clin)
+
+r <- ggplot(tsneData, aes(X1, X2,
+                          color = batch,
+                          shape = batch)) +
+  geom_jitter(size = 4, width = 0.5, height = 0.5, alpha = 0.5) +
+  theme_bw() + ggtitle('t-SNE before batch correction\n(Housekeeping genes)') +
   theme(plot.title = element_text(size = 12, face = "bold", hjust = 0.5),
         legend.title=element_text(size=10),
         legend.text=element_text(size=8)) + guides(size = F)
@@ -70,32 +88,42 @@ q <- ggplot(tsneData, aes(X1, X2,
         legend.title=element_text(size=10),
         legend.text=element_text(size=8)) + guides(size = F)
 
+# house keeping genes only
+set.seed(100) # set seed for reproducibility
+corrected_mat.hk <- corrected_mat[rownames(corrected_mat) %in% hkgenes,]
+tsneOut <- Rtsne(t(corrected_mat.hk), check_duplicates = FALSE, theta = 0)
+tsneData <- data.frame(tsneOut$Y, combined_clin)
+
+s <- ggplot(tsneData, aes(X1, X2,
+                          color = batch,
+                          shape = batch)) +
+  geom_jitter(size = 4, width = 0.5, height = 0.5, alpha = 0.5) +
+  theme_bw() + ggtitle('t-SNE after batch correction\n(Housekeeping genes)') +
+  theme(plot.title = element_text(size = 12, face = "bold", hjust = 0.5),
+        legend.title=element_text(size=10),
+        legend.text=element_text(size=8)) + guides(size = F)
+
 # save t-SNE plots
-ggarrange(p, q, ncol = 2, common.legend = T) %>%
-  ggexport(filename = tsne_plots, width = 12, height = 6)
+ggarrange(p, q, r, s, common.legend = T) %>%
+  ggexport(filename = tsne_plots, width = 12, height = 10)
 
 # distribution of housekeeping genes
-hkgenes <- c("ACTB", "TUBA1A", "TUBB", "GAPDH", "LDHA", "RPL19")
-
 # uncorrected  mat
-uncorrected_mat <- uncorrected_mat %>% 
-  as.data.frame %>% 
+uncorrected_mat.hk <- uncorrected_mat.hk %>% 
   rownames_to_column('gene') %>% 
-  filter(gene %in% hkgenes) %>%
   gather(-gene, key ="sample_id", value = 'value') %>%
   inner_join(combined_clin, by = "sample_id")
-p <- ggplot(uncorrected_mat, aes(x = log2(value + 1), fill =  batch)) + 
+p <- ggplot(uncorrected_mat.hk, aes(x = log2(value + 1), fill =  batch)) + 
   geom_density(alpha = .3) +
   ggtitle('House Keeping Genes (Before ComBat correction)')
 
 # corrected mat
-corrected_mat <- corrected_mat %>% 
-  as.data.frame %>% 
+corrected_mat.hk <- corrected_mat.hk %>% 
+  as.data.frame() %>%
   rownames_to_column('gene') %>% 
-  filter(gene %in% hkgenes) %>%
   gather(-gene, key ="sample_id", value = 'value') %>%
   inner_join(combined_clin, by = "sample_id")
-q <- ggplot(corrected_mat, aes(x = log2(value + 1), fill =  batch)) + 
+q <- ggplot(corrected_mat.hk, aes(x = log2(value + 1), fill =  batch)) + 
   geom_density(alpha = .3) +
   theme_bw() +
   ggtitle('House Keeping Genes (After ComBat correction)') +
