@@ -16,6 +16,11 @@ Rscript code/02-combine-matrices.R \
 --matrices "results/cohort3b_subset-gene-expression-rsem-tpm.collapsed.polya.rds, results/cohort3b_subset-gene-expression-rsem-tpm.collapsed.stranded.rds, results/gtex-brain-normals-gene-expression-rsem-tpm.collapsed.polya.rds, results/tgen-brain-normals-gene-expression-rsem-tpm.collapsed.polya.rds" \
 --outfile pnoc003-cohort3b-gtex-tgen-gene-expression-rsem-tpm.rds
 
+# 02. Combine collapsed matrices for immune deconvolution (Cohort 3b polyA + stranded)
+Rscript code/02-combine-matrices.R \
+--matrices "results/cohort3b_subset-gene-expression-rsem-tpm.collapsed.polya.rds, results/cohort3b_subset-gene-expression-rsem-tpm.collapsed.stranded.rds" \
+--outfile pnoc003-cohort3b-gene-expression-rsem-tpm.rds
+
 # 02. Create Clinical for each study
 # PNOC003 Cohort3b polyA
 Rscript code/02-create-clin.R \
