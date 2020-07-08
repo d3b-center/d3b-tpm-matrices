@@ -16,7 +16,7 @@ Rscript code/01-collapse-matrices.R \
 --gene_sym FALSE \
 --outfile tgen-brain-normals-gene-expression-rsem-tpm.collapsed.polya.rds
 
-# PNOC003 Cohort3
+# PNOC003 Cohort1
 Rscript code/01-collapse-matrices.R \
 --mat data/pnoc003_subset_Diagnosis-gene-expression-rsem-tpm.polya.rds \
 --gene_sym FALSE \
@@ -42,7 +42,7 @@ Rscript code/02-create-clin.R \
 --study TGEN \
 --outfile tgen-batch-metadata.rds
 
-# PNOC003 Cohort3
+# PNOC003 Cohort1
 Rscript code/02-create-clin.R \
 --mat results/pnoc003_subset_Diagnosis-gene-expression-rsem-tpm.collapsed.polya.rds \
 --library polyA \
