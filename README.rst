@@ -57,7 +57,7 @@ S3 location
 
 .. code-block:: bash
 
-    aws s3 --profile saml cp --recursive results/ s3://d3b-bix-dev-data-bucket/hgg-dmg-integration/batch_correction/ --include "*.rds"
+    aws s3 --profile saml sync results/ s3://d3b-bix-dev-data-bucket/hgg-dmg-integration/batch_correction/ --include "*.rds"
 
 
 
