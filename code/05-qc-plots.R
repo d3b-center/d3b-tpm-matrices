@@ -115,7 +115,9 @@ uncorrected_mat.hk <- uncorrected_mat.hk %>%
   inner_join(combined_clin, by = "sample_id")
 p <- ggplot(uncorrected_mat.hk, aes(x = log2(value + 1), fill =  batch)) + 
   geom_density(alpha = .3) +
-  ggtitle('House Keeping Genes (Before ComBat correction)')
+  theme_bw() +
+  ggtitle('House Keeping Genes (Before ComBat correction)') +
+  xlab("log2(TPM + 1)")
 
 # corrected mat
 corrected_mat.hk <- corrected_mat.hk %>% 
@@ -123,11 +125,11 @@ corrected_mat.hk <- corrected_mat.hk %>%
   rownames_to_column('gene') %>% 
   gather(-gene, key ="sample_id", value = 'value') %>%
   inner_join(combined_clin, by = "sample_id")
-q <- ggplot(corrected_mat.hk, aes(x = log2(value + 1), fill =  batch)) + 
+q <- ggplot(corrected_mat.hk, aes(x = value, fill =  batch)) + 
   geom_density(alpha = .3) +
   theme_bw() +
   ggtitle('House Keeping Genes (After ComBat correction)') +
-  xlab("batch corrected value")
+  xlab("ComBat corrected value")
 
 # save plots
 ggarrange(p, q, ncol = 2, common.legend = T) %>%

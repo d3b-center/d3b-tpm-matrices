@@ -50,5 +50,5 @@ if(identical(rownames(combined_clin), colnames(combined_mat))){
 }
 
 # batch correct using ComBat
-corrected_mat <- ComBat(dat = log2(combined_mat + 1), batch = combined_clin$batch)
+corrected_mat <- ComBat(dat = combined_mat, batch = combined_clin$batch)
 saveRDS(corrected_mat, file = corrected_outfile)
