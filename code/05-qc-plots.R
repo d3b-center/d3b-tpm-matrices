@@ -47,7 +47,7 @@ hkgenes <- c("ACTB", "TUBA1A", "TUBB", "GAPDH", "LDHA", "RPL19")
 
 # t-SNE (uncorrected matrix)
 set.seed(100) # set seed for reproducibility
-tsneOut <- Rtsne(t(log2(uncorrected_mat+1)), check_duplicates = FALSE, theta = 0)
+tsneOut <- Rtsne(t(log2(uncorrected_mat + 1)), check_duplicates = FALSE, theta = 0)
 tsneData <- data.frame(tsneOut$Y, combined_clin)
 
 p <- ggplot(tsneData, aes(X1, X2,
@@ -62,7 +62,7 @@ p <- ggplot(tsneData, aes(X1, X2,
 # house keeping genes only
 set.seed(100) # set seed for reproducibility
 uncorrected_mat.hk <- uncorrected_mat[rownames(uncorrected_mat) %in% hkgenes,]
-tsneOut <- Rtsne(t(log2(uncorrected_mat.hk+1)), check_duplicates = FALSE, theta = 0)
+tsneOut <- Rtsne(t(log2(uncorrected_mat.hk + 1)), check_duplicates = FALSE, theta = 0)
 tsneData <- data.frame(tsneOut$Y, combined_clin)
 
 r <- ggplot(tsneData, aes(X1, X2,
@@ -76,7 +76,7 @@ r <- ggplot(tsneData, aes(X1, X2,
 
 # t-SNE (corrected matrix)
 set.seed(100) # set seed for reproducibility
-tsneOut <- Rtsne(t(corrected_mat), check_duplicates = FALSE, theta = 0)
+tsneOut <- Rtsne(t(log2(corrected_mat + 1)), check_duplicates = FALSE, theta = 0)
 tsneData <- data.frame(tsneOut$Y, combined_clin)
 
 q <- ggplot(tsneData, aes(X1, X2,
@@ -91,7 +91,7 @@ q <- ggplot(tsneData, aes(X1, X2,
 # house keeping genes only
 set.seed(100) # set seed for reproducibility
 corrected_mat.hk <- corrected_mat[rownames(corrected_mat) %in% hkgenes,]
-tsneOut <- Rtsne(t(corrected_mat.hk), check_duplicates = FALSE, theta = 0)
+tsneOut <- Rtsne(t(log2(corrected_mat.hk + 1)), check_duplicates = FALSE, theta = 0)
 tsneData <- data.frame(tsneOut$Y, combined_clin)
 
 s <- ggplot(tsneData, aes(X1, X2,
@@ -125,11 +125,11 @@ corrected_mat.hk <- corrected_mat.hk %>%
   rownames_to_column('gene') %>% 
   gather(-gene, key ="sample_id", value = 'value') %>%
   inner_join(combined_clin, by = "sample_id")
-q <- ggplot(corrected_mat.hk, aes(x = value, fill =  batch)) + 
+q <- ggplot(corrected_mat.hk, aes(x = log2(value + 1), fill =  batch)) + 
   geom_density(alpha = .3) +
   theme_bw() +
   ggtitle('House Keeping Genes (After ComBat correction)') +
-  xlab("ComBat corrected value")
+  xlab("log2(ComBat corrected value + 1)")
 
 # save plots
 ggarrange(p, q, ncol = 2, common.legend = T) %>%

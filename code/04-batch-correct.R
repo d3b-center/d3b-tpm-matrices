@@ -49,6 +49,7 @@ if(identical(rownames(combined_clin), colnames(combined_mat))){
   break
 }
 
-# batch correct using ComBat
-corrected_mat <- ComBat(dat = combined_mat, batch = combined_clin$batch)
+# batch correct using ComBat (log2(TPM + 1))
+corrected_mat <- ComBat(dat = log2(combined_mat + 1), batch = combined_clin$batch)
+corrected_mat <- 2^(corrected_mat) # back-transform
 saveRDS(corrected_mat, file = corrected_outfile)
